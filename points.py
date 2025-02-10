@@ -1,6 +1,4 @@
 import math
-import numpy as np
-import matplotlib.pyplot as plt
 
 
 class Point:
@@ -75,13 +73,13 @@ class Swarm:
             new_points.append(moved_point)
 
         self.points = new_points[1:]
+        print("updated")
 
 
 def gravity(particle: Point, points: list[Point]) -> Point:
     fx, fy = (0, 0)  # Initial forces
     G: float = 6.67 * (10 ** -11)  # Gravitational Constant
     t: float = 1000  # Time between calculations/jumps
-
 
     # Iterate through points adding up gravitational force
     for point in points:
