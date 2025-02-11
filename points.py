@@ -1,6 +1,7 @@
 import math
 
 
+
 class Point:
     """
     Point class for each particle
@@ -12,16 +13,18 @@ class Point:
     fx: float
     fy: float
     mass: float
+    radius: float
 
     def __init__(self, pos: tuple[float, float],
                  vel: tuple[float, float] = (0, 0),
                  f: tuple[float, float] = (0, 0),
-                 m: float = 1) -> None:
+                 m: float = 1, r: float = 1) -> None:
 
         self.x, self.y = pos
         self.vx, self.vy = vel
         self.fx, self.fy = f
         self.mass = m
+        self.radius = r
 
     def distance(self, point: 'Point') -> float:
         return math.sqrt((self.x - point.x) ** 2 + (self.y - point.y) ** 2)
@@ -65,6 +68,9 @@ class Swarm:
             ans += "\n"
         return ans
 
+    def remove(self, point):
+        self.points.remove(point)
+
     def update(self, func) -> None:
         new_points: list[Point] = [Point((0, 0))]
 
@@ -76,29 +82,4 @@ class Swarm:
         print("updated")
 
 
-def gravity(particle: Point, points: list[Point]) -> Point:
-    fx, fy = (0, 0)  # Initial forces
-    G: float = 6.67 * (10 ** -11)  # Gravitational Constant
-    t: float = 1000  # Time between calculations/jumps
-
-    # Iterate through points adding up gravitational force
-    for point in points:
-        if point != particle:
-            r = particle.distance(point)
-            dir_x, dir_y = particle.direction(point)
-
-            fx += ((G * particle.mass * point.mass) / (r ** 2)) * dir_x
-            fy += (G / (r ** 2)) * dir_y
-
-    vx = fx * t + particle.vx
-    vy = fy * t + particle.vy
-
-    fx = fx + particle.fx
-    fy = fy + particle.fy
-
-    x = vx * t + 0.5 * (fx * (t ** 2)) + particle.x
-    y = vy * t + 0.5 * (fy * (t ** 2)) + particle.y
-
-    new_point = Point((x, y), (vx, vy), (fx, fy))
-    return new_point
 
